@@ -21,7 +21,7 @@ class WorldNewsApi implements NewsSourceInterface
      */
     public function fetchNews(int $limit = 100, int $page = 1): array
     {
-        try{
+        try {
             $apikey = config('services.apikeys.worldnewsapi_key');
             $offset = ($page - 1) * $limit;
             $jsonData = Http::get("https://api.worldnewsapi.com/search-news?number=$limit&offset=$offset&language=en&categories=politics,sports,business,technology,entertainment,health,science,lifestyle,travel,culture,education,environment,other&number=100&api-key=$apikey");
@@ -33,7 +33,7 @@ class WorldNewsApi implements NewsSourceInterface
             };
 
             return $jsonData['news'];
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
     }

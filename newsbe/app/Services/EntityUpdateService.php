@@ -14,7 +14,7 @@ class EntityUpdateService
      * @param Collection $collection
      * @return void
      */
-    public function updateEntity(string $entityModel, Collection $collection ): void
+    public function updateEntity(string $entityModel, Collection $collection): void
     {
         try {
             $existingCollection = $entityModel::whereIn('name', $collection)->pluck('id', 'name');
@@ -25,7 +25,7 @@ class EntityUpdateService
                 'updated_at' => now(),
             ])->toArray();
             $entityModel::upsert($collections, ['name'], ['name']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             Log::error($exception->getMessage());
         }
     }

@@ -47,7 +47,8 @@ class FetchNewsData extends Command
 
     public function __construct(
         EntityUpdateService $entityUpdateService,
-    ) {
+    )
+    {
         parent::__construct();
         $this->entityUpdateService = $entityUpdateService;
     }
@@ -97,7 +98,7 @@ class FetchNewsData extends Command
             }
 
             $this->info("All done, please make sure the queue worker is running");
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             $this->error($exception->getMessage());
         }
     }
@@ -133,7 +134,7 @@ class FetchNewsData extends Command
     protected function fetchAllNews(): array
     {
         $news = [];
-        $totalNumberOfArticles = (int) $this->option('fetch');
+        $totalNumberOfArticles = (int)$this->option('fetch');
 
         $limit = 100;
         for ($i = 0; $i < ceil($totalNumberOfArticles / $limit); $i++) {
@@ -155,8 +156,8 @@ class FetchNewsData extends Command
         try {
             $this->info(">>>>>>>>Fetching $limit news from $page...");
             return $this->newsSource->fetchNews($limit, $page);
-        }catch(\Exception $e){
-            $this->error("Hello Error:  " .$e->getMessage());
+        } catch (\Exception $e) {
+            $this->error("Hello Error:  " . $e->getMessage());
             return [];
         }
     }
@@ -182,7 +183,7 @@ class FetchNewsData extends Command
 
                 $formattedData = $this->newsSource->formatNewsData($item, $author_id, $category_id, $source_id);
                 $newsToInsertOrUpdate[] = $formattedData;
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
 //                $this->error(json_encode($item));
                 $this->error($e->getMessage());
             }

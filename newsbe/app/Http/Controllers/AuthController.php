@@ -9,7 +9,7 @@ use Validator;
 
 class AuthController extends Controller
 {
-        /**
+    /**
      * Create user
      *
      * @param  [string] name
@@ -22,24 +22,23 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'email'=>'required|string|unique:users',
-            'password'=>'required|string',
+            'email' => 'required|string|unique:users',
+            'password' => 'required|string',
             'c_password' => 'required|same:password'
         ]);
 
         $user = new User([
-            'name'  => $request->name,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
 
-        if($user->save()){
+        if ($user->save()) {
             return response()->json([
                 'message' => 'Registered Successfully Please Login!',
-            ],201);
-        }
-        else{
-            return response()->json(['error'=>'Provide proper details']);
+            ], 201);
+        } else {
+            return response()->json(['error' => 'Provide proper details']);
         }
     }
 
@@ -59,12 +58,11 @@ class AuthController extends Controller
             'remember_me' => 'boolean'
         ]);
 
-        $credentials = request(['email','password']);
-        if(!Auth::attempt($credentials))
-        {
+        $credentials = request(['email', 'password']);
+        if (!Auth::attempt($credentials)) {
             return response()->json([
                 'message' => 'Unauthorized'
-            ],401);
+            ], 401);
         }
 
         $user = $request->user();
@@ -72,7 +70,7 @@ class AuthController extends Controller
         $token = $tokenResult->plainTextToken;
 
         return response()->json([
-            'accessToken' =>$token,
+            'accessToken' => $token,
             'token_type' => 'Bearer',
             'name' => $user->name,
             'email' => $user->email,

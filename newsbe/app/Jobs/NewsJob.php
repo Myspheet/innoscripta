@@ -29,7 +29,7 @@ class NewsJob implements ShouldQueue
     {
         try {
             News::upsert($this->newsData, ['url_hash'], ['title', 'description', 'published_at']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             Log::error($exception->getMessage());
         }
     }

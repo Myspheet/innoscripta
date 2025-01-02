@@ -24,11 +24,11 @@ class MediaStack implements NewsSourceInterface
     {
         $apiKey = config('services.apikeys.mediastack_key');
         $offset = ($page - 1) * $limit;
-        $jsonData= Http::get("https://api.mediastack.com/v1/news?offset=$offset&languages=en&access_key=$apiKey&limit=$limit");
+        $jsonData = Http::get("https://api.mediastack.com/v1/news?offset=$offset&languages=en&access_key=$apiKey&limit=$limit");
 //        Storage::disk('local')->put('mediastack.json', $jsonData);
 //        $jsonData = Storage::disk('local')->get('mediastack.json');
 //        $data = json_decode($jsonData, true);
-        if(!array_key_exists('data', json_decode($jsonData, true))){
+        if (!array_key_exists('data', json_decode($jsonData, true))) {
             throw new \Exception("There was an error fetching news from Mediastack page $page");
         }
 

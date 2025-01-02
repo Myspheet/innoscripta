@@ -26,40 +26,7 @@ project-root/
 
 ---
 
-## Setting Up Environment Variables
-
-### Laravel Backend
-
-1. Copy the `.env.example` file to `.env` in the `laravel` directory:
-
-   ```bash
-   cp laravel/.env.example laravel/.env
-   ```
-
-2. Update the `.env` file with the database credentials to match the Docker setup:
-   ```env
-   DB_CONNECTION=mysql
-   DB_HOST=db
-   DB_PORT=3306
-   DB_DATABASE=laravel
-   DB_USERNAME=laravel
-   DB_PASSWORD=secret
-   ```
-
-### Vite Frontend
-
-1. Create a `.env` file in the `vite-app` directory:
-
-   ```bash
-   touch vite-app/.env
-   ```
-
-2. Add the following:
-   ```env
-   VITE_API_BASE_URL=http://localhost:8080/api
-   ```
-
----
+The env is included in the github repo
 
 ## Running the Application
 
@@ -104,7 +71,7 @@ project-root/
 
 ## Testing the Setup
 
-- Verify the Laravel backend is running by visiting `http://localhost:8080`.
+- Verify the Laravel backend is running by visiting `http://localhost:8000`.
 - Verify the Vite React frontend is running by visiting `http://localhost:3000`.
 - Test API connectivity by ensuring frontend calls to the backend endpoints return valid data.
 

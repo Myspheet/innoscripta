@@ -23,13 +23,12 @@ class NewsApi implements NewsSourceInterface
     {
 
         $apikey = config('services.apikeys.newsapi_key');
-        $jsonData= Http::get("https://newsapi.org/v2/everything?page=$page&q=Development&pageSize=$limit&apiKey=$apikey");
+        $jsonData = Http::get("https://newsapi.org/v2/everything?page=$page&q=Development&pageSize=$limit&apiKey=$apikey");
         Storage::disk('local')->put("newsap$page.json", $jsonData);
 //            $jsonData = Storage::disk('local')->get('newsapi.json');;
 //            $data = json_decode($jsonData, true);
 
-        if(!array_key_exists('articles', json_decode($jsonData, true)))
-        {
+        if (!array_key_exists('articles', json_decode($jsonData, true))) {
             $message = $jsonData['message'] ?? '';
             throw new \Exception("There was an error fetching news NewsApi from page $page with message: $message");
         }
