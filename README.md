@@ -39,7 +39,7 @@ The env is included in the github repo
 
 2. **Access the Applications**:
 
-   - **Laravel Backend**: [http://localhost:8080](http://localhost:8080)
+   - **Laravel Backend**: [http://localhost:8000](http://localhost:8000)
    - **Vite React Frontend**: [http://localhost:3000](http://localhost:3000)
 
 3. **Rebuild Containers** (if necessary):
