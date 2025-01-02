@@ -26,7 +26,7 @@ project-root/
 
 ---
 
-The env is included in the github repo
+On the newsbe, change .env.example to .env
 
 ## Running the Application
 
