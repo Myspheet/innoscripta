@@ -1,0 +1,182 @@
+import { useState } from "react";
+import axiosClient from "../helpers/axiosClient";
+// import { useStateContext } from "../context/ContextProvider";
+import { Link, useNavigate } from "react-router";
+
+const Register = () => {
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [c_password, setPasswordConfirmation] = useState("");
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
+
+  const onSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    if (!email || !password || !c_password || !name) {
+      setMessage("All fields are required");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+      return;
+    }
+
+    if (password !== c_password) {
+      setMessage("Passwords do not match");
+
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+      return;
+    }
+
+    const payload = {
+      email,
+      password,
+      c_password,
+      name,
+    };
+
+    axiosClient
+      .post("/auth/register", payload)
+      .then(({ data }: any) => {
+        console.log(data);
+
+        navigate("/login");
+      })
+      .catch((err) => {
+        console.log(err);
+
+        const response = err.response;
+        if (response && response.status === 422) {
+          setMessage(response.data.message);
+
+          setTimeout(() => {
+            setMessage("");
+          }, 3000);
+        }
+      });
+  };
+
+  return (
+    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img
+          className="mx-auto h-10 w-auto"
+          src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+          alt="Your Company"
+        />
+        <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+          Sign in to your account
+        </h2>
+      </div>
+
+      {/* Alert to show error message */}
+      {message && (
+        <div
+          className="mt-10 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+          role="alert"
+        >
+          <strong className="font-bold">Error! </strong>
+          <span className="block sm:inline">{message}</span>
+        </div>
+      )}
+
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form className="space-y-6" action="#" method="POST">
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Name
+            </label>
+            <div className="mt-2">
+              <input
+                type="text"
+                name="name"
+                id="name"
+                autoComplete="name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Email address
+            </label>
+            <div className="mt-2">
+              <input
+                type="email"
+                name="email"
+                id="email"
+                autoComplete="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Password
+            </label>
+            <div className="mt-2">
+              <input
+                type="password"
+                name="password"
+                id="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm/6 font-medium text-gray-900">
+              Confirm Password
+            </label>
+            <div className="mt-2">
+              <input
+                type="password"
+                name="c_password"
+                id="c_password"
+                required
+                value={c_password}
+                onChange={(e) => setPasswordConfirmation(e.target.value)}
+                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              onClick={onSubmit}
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Sign Up
+            </button>
+          </div>
+        </form>
+
+        <p className="mt-10 text-center text-sm/6 text-gray-500">
+          Have an account?
+          <Link to="/login">
+            <span className="font-semibold text-indigo-600 hover:text-indigo-500">
+              Login Up
+            </span>
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Register;

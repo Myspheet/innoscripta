@@ -1,0 +1,81 @@
+services:
+  ####################################################################################################
+  # app
+  ####################################################################################################
+  app:
+    build:
+      args:
+        user: developer
+        uid: 1000
+      context: ./newsbe
+      dockerfile: Dockerfile
+    image: app
+    env_file:
+      - ./newsbe/.env
+    container_name: news-be
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: laravel.test
+    working_dir: /var/www/
+    volumes:
+      - ./newsbe:/var/www
+      - ~/.ssh:/root/.ssh
+    depends_on:
+      - db
+    # networks:
+    #   - laravel
+
+  ####################################################################################################
+  # DATABASE (MySQL)
+  ####################################################################################################
+  db:
+    image: mysql:8.0
+    container_name: news-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./newsbe/.env
+    environment:
+      MYSQL_DATABASE: newsdb
+      MYSQL_ROOT_PASSWORD: newsdb
+      MYSQL_PASSWORD: newsdb
+      MYSQL_USER: newsdb
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/mysql/data:/var/lib/mysql
+      - ./docker-compose/mysql/logs:/var/log/mysql
+      - ./docker-compose/mysql/ql:/docker-entrypoint-initdb.d
+    # networks:
+    #   - laravel
+  ####################################################################################################
+  # Nginx
+  ####################################################################################################
+  nginx:
+    image: nginx:alpine
+    container_name: news-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+      - 443:443
+    volumes:
+      - ./newsbe:/var/www
+      - ./newsbe/nginx.conf:/etc/nginx/conf.d/default.conf
+
+  vite:
+    build:
+      context: ./newsfe
+      dockerfile: Dockerfile
+    container_name: news-fe
+    ports:
+      - "3000:80"
+    volumes:
+      - ./newsfe:/app
+      - ./newsfe/nginx.conf:/etc/nginx/conf.d/default.conf
+    restart: unless-stopped
+
+volumes:
+  db-data:
+    # networks:
+    #   - laravel
